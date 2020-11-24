@@ -1,1 +1,1 @@
-# TELUS_Business_Case
+# TELUS Business Case (Maiku Nakajima)
