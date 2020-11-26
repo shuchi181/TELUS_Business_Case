@@ -1,0 +1,8 @@
+/* USER TYPES */
+export const GET_FORMS = 'GET_FORMS';
+export const GET_PUBLISHED_FORMS = 'GET_PUBLISHED_FORMS';
+export const GET_FORMS_ERROR = 'GET_FORMS_ERROR';
+/* FORM TYPES */
+export const GET_FORM = "GET_FORM";
+export const UPDATE_FORM = "UPDATE_FORM";
+export const FORM_UPDATE_ERROR = "FORM_UPDATE_ERROR";
