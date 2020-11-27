@@ -15,7 +15,7 @@ app.use('/user', require('./routes/user'));
 app.use('/form', require('./routes/form'));
 
 // Serve static assets in production
-if(process.eventNames.NODE_ENV === 'production') {
+if(process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'));
 
     app.get('*', (req, res) => {
