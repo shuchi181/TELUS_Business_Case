@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { createForm } from '../../actions/form';
+import { clearUser } from '../../actions/user';
 
 import { Container, Col, Row, Form, Button, Popover, OverlayTrigger } from 'react-bootstrap';
 
@@ -12,6 +12,7 @@ import { AiOutlineQuestionCircle } from 'react-icons/ai';
 
 const NewForm = ({
     createForm,
+    clearUser,
     history
 }) => {
     // Preview
@@ -101,6 +102,7 @@ const NewForm = ({
         e.preventDefault();
 
         createForm(formData);
+        clearUser();
         history.goBack();
     }
     return formData && !showPreview ? (
@@ -240,10 +242,11 @@ const NewForm = ({
 NewForm.propTypes = {
     createForm: PropTypes.func.isRequired,
     form: PropTypes.object.isRequired,
+    clearUser: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
     form: state.form
 })
 
-export default connect(mapStateToProps, { createForm })(NewForm);
+export default connect(mapStateToProps, { createForm, clearUser })(NewForm);

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { updateForm, getForm } from '../../actions/form';
-
+import { clearUser } from '../../actions/user';
 import { Container, Col, Row, Form, Button } from 'react-bootstrap';
 
 import PreviewForm from './PreviewForm';
@@ -25,6 +24,7 @@ const EditForm = ({
     form: { form, loading },
     updateForm,
     getForm,
+    clearUser,
     match,
     history
 }) => {
@@ -134,6 +134,8 @@ const EditForm = ({
         event.preventDefault();
 
         updateForm(match.params.formId, formData);
+        clearUser();
+        history.goBack();
     }
 
     const {
@@ -259,10 +261,11 @@ EditForm.propTypes = {
     updateForm: PropTypes.func.isRequired,
     getForm: PropTypes.func.isRequired,
     form: PropTypes.object.isRequired,
+    clearUser: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
     form: state.form
 })
 
-export default connect(mapStateToProps, { updateForm, getForm })(EditForm);
+export default connect(mapStateToProps, { updateForm, getForm, clearUser })(EditForm);

@@ -4,15 +4,26 @@ import { connect } from 'react-redux';
 
 import { Table, Row, Button, Container } from 'react-bootstrap';
 
-import { getFormResponses } from '../../actions/form';
+import { getFormResponses, clearForm } from '../../actions/form';
 
-const ResponseView = ({ form: { responses }, getFormResponses, match, history }, ) => {
+const ResponseView = ({
+    form: { responses },
+    getFormResponses,
+    clearForm,
+    match,
+    history 
+}, ) => {
 
     useEffect(() => {
         if(!responses) getFormResponses(match.params.formId);
     }, [responses, getFormResponses, match.params.formId]);
 
-    return responses && (
+    const onGoBack = () => {
+        clearForm();
+        history.push("");
+    }
+
+    return responses && responses.length > 0 ? (
         <Container fluid className="p-4">
             <Table striped bordered>
                 <thead>
@@ -25,7 +36,7 @@ const ResponseView = ({ form: { responses }, getFormResponses, match, history },
                     </tr>
                 </thead>
                 <tbody>
-                    {responses.length > 0 ? (
+                    {responses.length > 0 && (
                         responses.map((response,key) => (
                             <tr key={key}>
                                 <td>{response.shortTextResponse}</td>
@@ -35,13 +46,18 @@ const ResponseView = ({ form: { responses }, getFormResponses, match, history },
                                 <td>{response.dropdownResponse}</td>
                             </tr>
                         ))
-                    ) : (
-                        <h2>No responses yet...</h2>
                     )}
                 </tbody>
             </Table>
             <Row className="mt-4 ml-1">
-                <Button type="button" variant="secondary" onClick={() => history.goBack()}>Go Back</Button>
+                <Button type="button" variant="secondary" onClick={() => onGoBack()}>Go Back</Button>
+            </Row>
+        </Container>
+    ) : (
+        <Container fluid className="p-4">
+            <h3>No responses yet...</h3>
+            <Row className="mt-4 ml-1">
+                <Button type="button" variant="secondary" onClick={() => onGoBack()}>Go Back</Button>
             </Row>
         </Container>
     );
@@ -50,10 +66,11 @@ const ResponseView = ({ form: { responses }, getFormResponses, match, history },
 ResponseView.propTypes = {
     form: PropTypes.object.isRequired,
     getFormResponses: PropTypes.func.isRequired,
+    clearForm: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
     form: state.form
 })
 
-export default connect(mapStateToProps, { getFormResponses })(ResponseView);
+export default connect(mapStateToProps, { getFormResponses, clearForm })(ResponseView);

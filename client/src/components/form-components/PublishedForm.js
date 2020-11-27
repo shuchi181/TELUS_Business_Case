@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getForm, formResponse } from '../../actions/form';
-
+import { getForm, formResponse, clearForm } from '../../actions/form';
+import { clearUser } from '../../actions/user';
 import { Container, Col, Row, Form, Button } from 'react-bootstrap';
 
 const initResponseState = {
@@ -17,15 +17,19 @@ const PublishedForm = ({
     form: { form, loading },
     getForm,
     formResponse,
+    clearForm,
+    clearUser,
     match,
     history
 }) => {
-
     const [formData, setFormData] = useState(initResponseState);
     
     useEffect(() => {
-        if(!form && !loading) getForm(match.params.formId);
-    }, [form, match.params.formId, getForm]);
+        if(!form) {
+            getForm(match.params.formId);
+            console.log("Get Form Called");
+        };
+    }, [form, match.params.formId, getForm, loading]);
 
     const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -46,10 +50,12 @@ const PublishedForm = ({
         e.preventDefault();
         
         formResponse(match.params.formId, formData);
+        clearForm();
+        clearUser();
         history.goBack();
     }
 
-    return form && formData && !loading && (
+    return form !== null && (
         <Container fluid>
             <Row className="justify-content-md-center">
                 <Col xs={6}>
@@ -120,10 +126,12 @@ PublishedForm.propType = {
     form: PropTypes.object.isRequired,
     getForm: PropTypes.func.isRequired,
     formResponse: PropTypes.func.isRequired,
+    clearForm: PropTypes.func.isRequired,
+    clearUser: PropTypes.func.isRequired,
 }
 
 const mapStateToProp = state => ({
     form: state.form
 });
 
-export default connect(mapStateToProp, { getForm, formResponse })(PublishedForm);
+export default connect(mapStateToProp, { getForm, formResponse, clearForm, clearUser })(PublishedForm);

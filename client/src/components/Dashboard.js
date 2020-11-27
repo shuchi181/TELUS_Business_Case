@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
 
 import { getForms, getPublishedForms, publishForm, getNotifications, resetNotifications } from '../actions/user';
+
 // Bootstrap Components
 import { Container, Row, Card, Button, Alert, Popover, OverlayTrigger } from 'react-bootstrap';
 
@@ -29,7 +30,6 @@ const Dashboard = ({
         if(notifications && !notifications.hasChecked && notifications.newNotification > 0) {
             setShowNotification(true);
         }
-        
     }, [forms, publishedForms, getForms, getPublishedForms, loading, notifications, getNotifications]);
 
     const onClickPublish = (id) => {
@@ -129,7 +129,7 @@ Dashboard.propTypes = {
 }
 
 const mapStateToProps = state => ({
-    user: state.user
+    user: state.user,
 });
 
 export default connect(mapStateToProps, { getForms, getPublishedForms, publishForm, getNotifications, resetNotifications })(Dashboard);

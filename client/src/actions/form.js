@@ -74,3 +74,5 @@ export const getFormResponses = (formId) => async dispatch => {
         
     }
 };
+
+export const clearForm = () => dispatch => dispatch({ type: CLEAR_FORM });

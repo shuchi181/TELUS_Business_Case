@@ -47,6 +47,7 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 form: null,
+                responses: null,
                 loading: false
             }
         default:

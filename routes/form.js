@@ -137,7 +137,6 @@ router.post('/form-response/:formId', async (req, res) => {
                 dropdownResponse: req.body.dropdownValue
             }}}
         );
-        const formTitle = await Form.findOneAndUpdate({ _id: formId });
        
         // Update notifications
         await User.updateOne({}, { $inc: { "notifications.newNotification": 1 }, $set: { "notifications.hasChecked": false } });

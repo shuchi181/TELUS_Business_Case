@@ -79,3 +79,6 @@ export const resetNotifications = () => async dispatch => {
         console.error(err);
     }
 }
+
+/* Clear user */
+export const clearUser = () => dispatch => dispatch({ type: CLEAR_USER });
