@@ -11,3 +11,4 @@ export const GET_FORM = "GET_FORM";
 export const UPDATE_FORM = "UPDATE_FORM";
 export const CREATE_FORM = "CREATE_FORM";
 export const FORM_UPDATE_ERROR = "FORM_UPDATE_ERROR";
+export const GET_FORM_RESPONSES = "GET_FORM_RESPONSES";

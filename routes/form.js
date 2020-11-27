@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
+const fs = require('fs');
+const Json2csvParser = require('json2csv').Parser;
+
 const Form = require('../models/Form');
 const User = require('../models/User');
 /**
@@ -120,13 +123,6 @@ router.post('/update-form/:formId', async (req, res) => {
  * @access  PUBLIC
  */
 router.post('/form-response/:formId', async (req, res) => {
-    const formResponse = {
-        shortTextValue: req.body.shortTextValue,
-        longTextValue: req.body.longTextValue,
-        multipleChoiceValue: req.body.multipleChoiceValue,
-        checkboxValue: req.body.checkboxValue,
-        dropdowmValue: req.body.dropdownValue
-    };
 
     try {
         const formId = req.params.formId;
@@ -148,5 +144,17 @@ router.post('/form-response/:formId', async (req, res) => {
         console.error(err);
     }   
 });
+
+router.get('/get-form-responses/:formId', async (req, res) => {
+    try {
+        const form = await Form.find({});
+        if(!form) return res.json([]);
+        
+        res.json(form[0].formResponses);
+    } catch (err) {
+        console.log(err);
+    }
+});
+
 
 module.exports = router;

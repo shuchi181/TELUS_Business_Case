@@ -80,7 +80,7 @@ router.post('/publish-form/:formId', async (req, res) => {
 router.get('/published-forms', async (req, res) => {
     try {
         const user = await User.find({});
-        if(!user[0]) return json([]);
+        if(!user[0]) return res.json([]);
 
         let formIds = new Array();
         user[0].publishedForms.map(form => {
@@ -105,7 +105,7 @@ router.get('/published-forms', async (req, res) => {
 router.get('/get-notifications', async (req, res) => {
     try {
         const user = await User.find({});
-        
+        if(!user) return res.json([]);
         res.json(user[0].notifications);
     } catch (err) {
         console.error(err);

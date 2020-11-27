@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { getForms, getPublishedForms, publishForm, getNotifications, resetNotifications } from '../actions/user';
-
 // Bootstrap Components
 import { Container, Row, Card, Button, Alert } from 'react-bootstrap';
 
@@ -14,7 +13,7 @@ const Dashboard = ({
     getPublishedForms,
     publishForm,
     getNotifications,
-    resetNotifications
+    resetNotifications,
 }) => {
 
     const [formRerender, setFormRerender] = useState({
@@ -90,7 +89,10 @@ const Dashboard = ({
                         <Card key={key} className="h-100 m-2 p-2">
                             <Card.Body>
                                 <Card.Title>{form.form.title}</Card.Title>
+                                <Card.Text>{form.form.description}</Card.Text>
+                                <Card.Text>Responses: {form.formResponses.length || 0}</Card.Text>
                                 <Link to={`/published-form/${form._id}`}>Fill Out Form</Link>
+                                <Link to={`/view-responses/${form._id}`}>View Responses</Link>
                             </Card.Body>
                         </Card>
                     ))
@@ -109,6 +111,7 @@ Dashboard.propTypes = {
     publishForm: PropTypes.func.isRequired,
     getNotifications: PropTypes.func.isRequired,
     resetNotifications: PropTypes.func.isRequired,
+    exportResponse: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
