@@ -9,11 +9,11 @@
 2. Making a semi dynamic form builder with just React and the backend that will allow us to edit forms and publish them.
 
 ## Bugs to fix and Improvements to be made
-**Bugs**
+**Bugs:**
 1. Components not rerendering after redux state is changed.
 2. Published Forms fail to load due to the bug above.
 
-**Improvements**
+**Improvements:**
 1. Add authentication so dashboard is not public.
 2. Restructure database for more efficient data retrieval and upload.
 3. **Make Form Fully Dynamic**
