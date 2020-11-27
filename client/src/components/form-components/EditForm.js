@@ -25,7 +25,8 @@ const EditForm = ({
     form: { form, loading },
     updateForm,
     getForm,
-    match
+    match,
+    history
 }) => {
 
     const [formData, setFormData] = useState(initState);
@@ -50,7 +51,7 @@ const EditForm = ({
             }
             setFormData(data);
         }
-    }, [match.params.formId, form, getForm]);
+    }, [match.params.formId, form, getForm, loading]);
     // Preview
     const [showPreview, setShowPreview] = useState(false);
 
@@ -217,7 +218,7 @@ const EditForm = ({
                             <Form.Control className="mb-2" as="select" defaultValue="Select" disabled>
                                 {dropdownOptions && dropdownOptions.length > 0 && (
                                     dropdownOptions.map((value, key) => (
-                                        <option>{value}</option>
+                                        <option key={key}>{value}</option>
                                     ))
                                 )}
                             </Form.Control>
@@ -241,9 +242,9 @@ const EditForm = ({
                             </Form.Row>
                         </Form.Group>
                         <Form.Group className="mt-4">
+                            <Button className="mr-2" variant="secondary" type="button" onClick={() => history.goBack()}>Back</Button>
                             <Button className="mr-2" type="submit">Save Form</Button>
                             <Button type="button" onClick={() => setShowPreview(true)}>Preview Form</Button>
-                            <Link to="/" className="ml-2">Back</Link>
                         </Form.Group>
                     </Form>
                 </Col>

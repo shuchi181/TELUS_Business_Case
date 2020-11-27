@@ -22,6 +22,9 @@ const UserSchema = new mongoose.Schema({
             type: Number,
             default: 0
         },
+        formTitle: {
+            type: String
+        },
         hasChecked: {
             type: Boolean,
             default: false

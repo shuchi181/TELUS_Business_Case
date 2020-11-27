@@ -9,7 +9,7 @@ const initResponseState = {
     shortTextValue: '',
     longTextValue: '',
     multipleChoiceValue: '',
-    checkboxValue: '',
+    checkboxValues: [],
     dropdownValue: ''
 };
 
@@ -17,7 +17,8 @@ const PublishedForm = ({
     form: { form, loading },
     getForm,
     formResponse,
-    match
+    match,
+    history
 }) => {
 
     const [formData, setFormData] = useState(initResponseState);
@@ -28,10 +29,24 @@ const PublishedForm = ({
 
     const onChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
+    const onCheckboxChange = (e) => {
+        const options = [...formData.checkboxValues];
+        let index;
+        if(e.target.checked){
+            options.push(e.target.value);
+        } else {
+            index = options.indexOf(e.target.value);
+            options.splice(index, 1);
+        }
+
+        setFormData({ ...formData, checkboxValues: options });
+    }
+
     const onSubmit = (e) => {
         e.preventDefault();
-
+        
         formResponse(match.params.formId, formData);
+        history.goBack();
     }
 
     return form && formData && !loading && (
@@ -73,7 +88,7 @@ const PublishedForm = ({
                                 form.checkbox.checkboxOptions.map((value, key) => (
                                     <Form.Row key={key}>
                                         <Col>
-                                            <Form.Check label={value} value={value} name="checkboxValue" type="checkbox" onChange={e => onChange(e)}/>
+                                            <Form.Check label={value} value={value} name="checkboxValues" type="checkbox" onChange={e => onCheckboxChange(e)}/>
                                         </Col>
                                     </Form.Row>
                                 ))

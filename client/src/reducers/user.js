@@ -4,7 +4,8 @@ import {
     PUBLISH_FORM,
     GET_PUBLISHED_FORMS,
     GET_NOTIFICATIONS,
-    RESET_NOTIFICATIONS
+    RESET_NOTIFICATIONS,
+    CLEAR_USER
 } from '../actions/types';
 
 const initialState = {
@@ -54,6 +55,13 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 error: payload,
+                loading: false
+            }
+        case CLEAR_USER:
+            return {
+                ...state,
+                forms: null,
+                publishedForms: null,
                 loading: false
             }
         default: 

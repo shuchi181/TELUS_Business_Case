@@ -4,11 +4,13 @@ import {
     GET_FORM,
     UPDATE_FORM,
     CREATE_FORM,
-    GET_FORM_RESPONSES
+    GET_FORM_RESPONSES,
+    CLEAR_FORM
 } from './types';
 
 /* GET FORM */
 export const getForm = (formId) => async dispatch => {
+    dispatch({ type: CLEAR_FORM });
     try {
         const res = await api.get(`/form/${formId}`);
 

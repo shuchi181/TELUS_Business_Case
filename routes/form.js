@@ -126,19 +126,22 @@ router.post('/form-response/:formId', async (req, res) => {
 
     try {
         const formId = req.params.formId;
+        const formatArray = req.body.checkboxValues.join(', ');
         await Form.updateOne(
             { _id: formId },
             { $push: { formResponses: {
                 shortTextResponse: req.body.shortTextValue,
                 longTextResponse: req.body.longTextValue,
                 multipleChoiceResponse: req.body.multipleChoiceValue,
-                checkboxResponse: req.body.checkboxValue,
+                checkboxResponse: formatArray,
                 dropdownResponse: req.body.dropdownValue
             }}}
         );
-
+        const formTitle = await Form.findOneAndUpdate({ _id: formId });
+       
+        // Update notifications
         await User.updateOne({}, { $inc: { "notifications.newNotification": 1 }, $set: { "notifications.hasChecked": false } });
-
+        
         res.json({ msg: "Response Sent Successfully" });
     } catch (err) { 
         console.error(err);
@@ -147,7 +150,7 @@ router.post('/form-response/:formId', async (req, res) => {
 
 router.get('/get-form-responses/:formId', async (req, res) => {
     try {
-        const form = await Form.find({});
+        const form = await Form.find({_id: req.params.formId});
         if(!form) return res.json([]);
         
         res.json(form[0].formResponses);

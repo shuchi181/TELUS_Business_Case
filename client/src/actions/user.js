@@ -3,10 +3,10 @@ import api from '../utils/api';
 import {
     GET_FORMS,
     GET_PUBLISHED_FORMS,
-    GET_FORMS_ERROR,
     PUBLISH_FORM,
     GET_NOTIFICATIONS,
-    RESET_NOTIFICATIONS
+    RESET_NOTIFICATIONS,
+    CLEAR_USER
 } from './types';
 
 /* GET FORMS */

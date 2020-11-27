@@ -51,7 +51,7 @@ const FormSchema = new mongoose.Schema({
                 type: String
             },
             checkboxResponse: {
-                type: String
+                type: [String]
             },
             dropdownResponse: {
                 type: String

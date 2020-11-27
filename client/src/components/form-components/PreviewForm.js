@@ -75,7 +75,7 @@ const PreviewForm = ({formData: { formData, setShowPreview }}) => {
                             </Form.Control>
                         </Form.Group>
                         <Form.Group className="mt-4">
-                            <Button type="button" onClick={() => setShowPreview(false)}>Back</Button>
+                            <Button type="button" variant="secondary" onClick={() => setShowPreview(false)}>Back</Button>
                         </Form.Group>
                     </Form>
                 </Col>

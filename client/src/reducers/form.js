@@ -3,12 +3,13 @@ import {
     UPDATE_FORM,
     CREATE_FORM,
     FORM_UPDATE_ERROR,
-    GET_FORM_RESPONSES
+    GET_FORM_RESPONSES,
+    CLEAR_FORM
 } from '../actions/types';
 
 const initialState = {
     form: null,
-    loadng: true,
+    loading: true,
     responses: null,
     error: {}
 }
@@ -19,17 +20,20 @@ export default function(state = initialState, action) {
     switch(type) {
         case GET_FORM:
             return {
+                ...state,
                 form: payload,
                 loading: false
             }
         case UPDATE_FORM:
         case CREATE_FORM:
             return {
+                ...state,
                 form: payload,
                 loading: false
             }
         case GET_FORM_RESPONSES:
             return {
+                ...state,
                 responses: payload,
                 loading: false
             }
@@ -37,6 +41,12 @@ export default function(state = initialState, action) {
             return {
                 ...state,
                 error: payload,
+                loading: false
+            }
+        case CLEAR_FORM:
+            return {
+                ...state,
+                form: null,
                 loading: false
             }
         default:
