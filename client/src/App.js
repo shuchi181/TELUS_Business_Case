@@ -6,9 +6,10 @@ import './App.css';
 import store from './store';
 
 import Dashboard from './components/Dashboard';
-import NewForm from './components/form-components/NewForm';
 import EditForm from './components/form-components/EditForm';
+import NewForm from './components/form-components/NewForm';
 import PublishedForm from './components/form-components/PublishedForm';
+import TopBar from './components/layouts/TopBar';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -18,6 +19,7 @@ function App() {
     <Provider store={store}>
       <Router>
         <Fragment>
+          <TopBar />
           <Switch>
             <Route exact path="/" component={Dashboard} />
             <Route exact path="/new-form" component={NewForm} />

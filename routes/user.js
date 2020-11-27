@@ -11,11 +11,64 @@ const Form = require('../models/Form');
  */
 router.get('/forms', async (req, res) => {
     try {
-        const user = await User.find();
+        const user = await User.find({});
+        if(!user[0]) return res.json([]);
 
-        res.json(user.forms);
+        // Get all formId of editable/non published forms
+        let editIds = new Array();
+        user[0].forms.map(form => {
+            editIds.push(form.formId);
+        });
+
+        const editForms = await Form.find(
+            {_id: { $in: editIds } }
+        );
+        
+        res.json(editForms);   
     } catch (err) {
         console.error(err);
+    }
+});
+
+/**
+ * @route   POST user/publish-form
+ * @desc    POST publish form
+ * @access  PUBLIC
+ */
+router.post('/publish-form/:formId', async (req, res) => {
+    try {
+        
+        // Add formId to publishedForms
+        await User.findOneAndUpdate({}, { $addToSet: { publishedForms: { formId: req.params.formId } } }, { new: true, upsert: true, returnOriginal: false } );
+        // Remove formId from the forms array because its been published
+        await User.findOneAndUpdate({}, { $pull: { forms: { formId: req.params.formId } } }, { new: true, upsert: true, returnOriginal: false } );
+        
+        const user = await User.find({});
+        if(!user[0]) return json([]);
+
+        let publishedIds = new Array();
+        user[0].publishedForms.map(form => {
+            publishedIds.push(form.formId);
+        });
+
+        let editIds = new Array();
+        user[0].forms.map(form => {
+            editIds.push(form.formId);
+        });
+
+        const editForms = await Form.find(
+            {_id: { $in: editIds } }
+        );
+
+        const publishedForms = await Form.find(
+            {_id: { $in: publishedIds } }
+        );
+        
+
+        res.json([editForms, publishedForms]);
+
+    } catch (err) {
+        console.log(err);
     }
 });
 
@@ -26,56 +79,52 @@ router.get('/forms', async (req, res) => {
  */
 router.get('/published-forms', async (req, res) => {
     try {
-        const user = await User.find();
+        const user = await User.find({});
+        if(!user[0]) return json([]);
 
-        res.json(user.publishedForms);
-    } catch (err) {
-        
-    }
-});
-
-/**
- * @route   POST user/new-form
- * @desc    POST make a new form
- * @access  PUBLIC
- */
-router.post('/new-form', async (req, res) => {
-    try {
-        const user = await User.find();
-        let form = new Form();
-
-        user.forms.push({
-            formId: form._id,
-            published: false
+        let formIds = new Array();
+        user[0].publishedForms.map(form => {
+            formIds.push(form.formId);
         });
 
-        await form.save();
-        await user.save();
+        const forms = await Form.find(
+            {_id: { $in: formIds } }
+        );
 
-        res.json({ msg: "Successfully created a new form!" });
+        res.json(forms);
     } catch (err) {
         console.error(err);
     }
 });
 
 /**
- * @route   GET edit-form/:formId
- * @desc    GET form from formId
+ * @route   GET user/get-notifications
+ * @desc    GET all notifications
  * @access  PUBLIC
  */
-router.get('/edit-form/:formId', async (req, res) => {
+router.get('/get-notifications', async (req, res) => {
     try {
-        const formId = req.params.formId;
-        const form = await Form.findById(formId);
-
-        if(!form) return res.json({ msg: "Form does not exist" });
-
-        res.json(form);
+        const user = await User.find({});
+        
+        res.json(user[0].notifications);
     } catch (err) {
         console.error(err);
     }
 });
 
-
+/**
+ * @route   POST user/reset-notifications
+ * @desc    Remove and reset notifications
+ * @access  PUBLIC
+ */
+router.post('/reset-notifications', async (req, res) => {
+    try {
+        const user = await User.updateOne({}, { $set: { notifications: { newNotification: 0, hasChecked: true } } }, {returnOriginal: false});
+        if(!user[0]) return res.json([]);
+        res.json(user[0].notifications);
+    } catch (err) {
+        console.error(err);
+    }
+});
 
 module.exports = router;

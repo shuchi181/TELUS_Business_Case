@@ -3,7 +3,8 @@ import api from 'axios';
 import {
     GET_FORM,
     UPDATE_FORM,
-    FORM_UPDATE_ERROR
+    FORM_UPDATE_ERROR,
+    CREATE_FORM
 } from './types';
 
 /* GET FORM */
@@ -20,15 +21,38 @@ export const getForm = (formId) => async dispatch => {
     }
 }
 
+/* CREATE FORM */
+export const createForm = (formData) => async dispatch => {
+    try {
+        const res = await api.post('/form/create-form', formData);
+
+        dispatch({
+            type: CREATE_FORM,
+            payload: res.data
+        });
+    } catch (err) {
+        console.error(err);
+        console.log("Error in action");
+    }
+};
+
 /* UPDATE FORM */
 export const updateForm = (formId, formData) => async dispatch => {
     try {
-        const res = await api.post(`form/update-form/${formId}`, formData);
+        const res = await api.post(`/form/update-form/${formId}`, formData);
 
         dispatch({
             type: UPDATE_FORM,
             payload: res.data
         });
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+export const formResponse = (formId, formData) => async dispatch => {
+    try {
+        await api.post(`/form/form-response/${formId}`, formData);
     } catch (err) {
         console.error(err);
     }

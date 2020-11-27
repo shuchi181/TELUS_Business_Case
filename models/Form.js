@@ -8,21 +8,11 @@ const FormSchema = new mongoose.Schema({
         description: {
             type: String
         },
-        shortText: {
-            shortTextTitle: {
-                type: String
-            },
-            shortTextValue: {
-                type: String
-            }
+        shortTextTitle: {
+            type: String
         },
-        longText: {
-            longTextTitle: {
-                type: String,
-            },
-            longTextValue: {
-                type: String
-            }
+        longTextTitle: {
+            type: String
         },
         multipleChoice: {
             multipleChoiceTitle: {
@@ -51,54 +41,27 @@ const FormSchema = new mongoose.Schema({
     },
     formResponses: [
         {
-            title: {
+            shortTextResponse: {
                 type: String
             },
-            description: {
+            longTextResponse: {
                 type: String
             },
-            shortText: {
-                shortTextTitle: {
-                    type: String
-                },
-                shortText: {
-                    type: String
-                }
+            multipleChoiceResponse: {
+                type: String
             },
-            longText: {
-                title: {
-                    type: String,
-                },
-                text: {
-                    type: String
-                }
+            checkboxResponse: {
+                type: String
             },
-            multipleChoice: {
-                title: {
-                    type: String
-                },
-                options: {
-                    type: [String]
-                }
-            },
-            checkboxes: {
-                title: {
-                    type: String
-                },
-                options: {
-                    type: [String]
-                }
-            },
-            dropdown: {
-                title: {
-                    type: String
-                },
-                options: {
-                    type: [String]
-                }
+            dropdownResponse: {
+                type: String
             }
         }
-    ]
+    ],
+    date: {
+        type: Date,
+        default: Date.now
+    }
 });
 
 module.exports = Form = mongoose.model('form', FormSchema);

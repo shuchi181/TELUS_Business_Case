@@ -1,7 +1,8 @@
 import {
     GET_FORM,
     UPDATE_FORM,
-    FORM_UPDATE_ERROR
+    CREATE_FORM,
+    FORM_UPDATE_ERROR,
 } from '../actions/types';
 
 const initialState = {
@@ -20,6 +21,7 @@ export default function(state = initialState, action) {
                 loading: false
             }
         case UPDATE_FORM:
+        case CREATE_FORM:
             return {
                 form: payload,
                 loading: false

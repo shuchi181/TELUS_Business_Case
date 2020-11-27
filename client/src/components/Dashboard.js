@@ -1,70 +1,101 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import { getForms, getPublishedForms } from '../actions/user';
+import { getForms, getPublishedForms, publishForm, getNotifications, resetNotifications } from '../actions/user';
 
 // Bootstrap Components
-import { Container, Col, Row, Card } from 'react-bootstrap';
+import { Container, Row, Card, Button, Alert } from 'react-bootstrap';
 
 const Dashboard = ({
-    user: { forms, publishedForms },
+    user: { forms, publishedForms, notifications, loading },
     getForms,
-    getPublishedForms
+    getPublishedForms,
+    publishForm,
+    getNotifications,
+    resetNotifications
 }) => {
 
+    const [formRerender, setFormRerender] = useState({
+        forms: [],
+        publishedForms: []
+    });
+
+    const [showNotification, setShowNotification] = useState(false);
+
     useEffect(() => {
-        if(!forms || !publishedForms) {
+        if(!forms) {
             getForms();
             getPublishedForms();
+            getNotifications();
         }
-    }, [forms, publishedForms, getForms, getPublishedForms]);
+        if(!loading) setFormRerender({ forms: forms, publishedForms, publishedForms });
+        if(notifications && !notifications.hasChecked && notifications.newNotification > 0) {
+            setShowNotification(true);
+        }
+        
+    }, [forms, publishedForms, getForms, getPublishedForms, loading]);
 
-    return (
+    const onClickPublish = (id) => {
+        publishForm(id);
+        getForms();
+        getPublishedForms();
+    }
+
+    const removeNotification = () => {
+        setShowNotification(false);
+        resetNotifications();
+    }
+
+    return formRerender && (
         <Container fluid>
-            <Row>
-                <h1>TELUS Business Case</h1>
+            <Row className="m-4 d-flex flex-row">
+                {showNotification &&
+                    <Fragment>
+                        <Alert>
+                            You have {notifications.newNotification} new Notifications!
+                        </Alert>
+                        <Button type="button" onClick={() => removeNotification()}>Mark notification as seen</Button>
+                    </Fragment>
+                }
             </Row>
-
-            <Row>
-                <Col xs={3}>
-                    <Card>
-                        <Card.Body>
-                            <Card.Title>Make a new Form</Card.Title>
-                            <Link to="/new-form">New Form</Link>
-                        </Card.Body>
-                    </Card>
-                </Col>
+            <Row className="m-4 d-flex flex-row">
+                <h1 className="lead font-weight-bold w-100">Your Forms</h1>
+                <Card className="h-100 m-2 p-2">
+                    <Card.Body>
+                        <Card.Title>Make a new Form</Card.Title>
+                        <Link to="/new-form">New Form</Link>
+                    </Card.Body>
+                </Card>
                 {forms && forms.length > 0 ? (
-                    forms.map(form => (
-                        <Col xs={3}>
-                            <Card>
-                                <Card.Body>
-                                    <Card.Title>{form.title}</Card.Title>
-                                    <Link to={`/edit-form/${form._id}`} >Edit Form!</Link>
-                                </Card.Body>
-                            </Card>
-                        </Col>
+                    forms.map((form, key) => (
+                        <Card key={key} className="h-100 m-2 p-2">
+                            <Card.Body>
+                                <Card.Title>{form.form.title}</Card.Title>
+                                <Card.Text>{form.form.description}</Card.Text>
+                                <Link className="mr-4" to={`/edit-form/${form._id}`} >Edit Form!</Link>
+                                <Card.Link href="#" onClick={() => onClickPublish(form._id)}>Publish</Card.Link>
+                            </Card.Body>
+                        </Card>
                     ))
                 ) : (
-                    <h2>You currently have no forms...</h2>
+                    <p>No forms to show...</p>
                 )}
             </Row>
-            <Row>
-                {publishedForms && publishedForms.lenght > 0 ? (
-                    publishedForms.map(form => (
-                        <Col xs={3}>
-                            <Card>
-                                <Card.Body>
-                                    <Card.Title>{form.title}</Card.Title>
-                                    <Link to={`/published-form/${form._id}`}>Go To Form</Link>
-                                </Card.Body>
-                            </Card>
-                        </Col>
+            <Row className="m-4 d-flex flex-row ">
+                <h1 className="lead font-weight-bold w-100">Your Published Forms</h1>
+                {publishedForms && publishedForms.length > 0 ? (
+                    publishedForms.map((form, key) => (
+                        <Card key={key} className="h-100 m-2 p-2">
+                            <Card.Body>
+                                <Card.Title>{form.form.title}</Card.Title>
+                                <Link to={`/published-form/${form._id}`}>Fill Out Form</Link>
+                            </Card.Body>
+                        </Card>
                     ))
                 ) : (
-                    <h2>You have no published forms...</h2>
+                    <h4 className="lead">You have no published forms...</h4>
                 )}
             </Row>
         </Container>
@@ -75,10 +106,13 @@ Dashboard.propTypes = {
     user: PropTypes.object.isRequired,
     getForms: PropTypes.func.isRequired,
     getPublishedForms: PropTypes.func.isRequired,
+    publishForm: PropTypes.func.isRequired,
+    getNotifications: PropTypes.func.isRequired,
+    resetNotifications: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
     user: state.user
 });
 
-export default connect(mapStateToProps, { getForms, getPublishedForms })(Dashboard);
+export default connect(mapStateToProps, { getForms, getPublishedForms, publishForm, getNotifications, resetNotifications })(Dashboard);

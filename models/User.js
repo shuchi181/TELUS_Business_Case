@@ -5,7 +5,7 @@ const UserSchema = new mongoose.Schema({
         {
             formId: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'form'
+                ref: 'form',
             }
         }
     ],
@@ -13,17 +13,23 @@ const UserSchema = new mongoose.Schema({
         {
             formId: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'form'
+                ref: 'form',
             }
         }
     ],
     notifications: {
         newNotification: {
-            type: Number
+            type: Number,
+            default: 0
         },
         hasChecked: {
-            type: Boolean
+            type: Boolean,
+            default: false
         }
+    },
+    date: {
+        type: Date,
+        default: Date.now
     }
 });
 
