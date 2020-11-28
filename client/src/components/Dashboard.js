@@ -95,7 +95,7 @@ const Dashboard = ({
                 </Row>
                 <Row className="m-4 mt-3 d-flex flex-row w-100">
                     <h1 className="lead font-weight-bold w-100">Your Published Forms
-                        <OverlayTrigger trigger="click" placement="right" overlay={popover("Archived Forms", "Once archived, you can't edit or fill out the form. You can still view the form and see the past responses!")}>
+                        <OverlayTrigger trigger="click" placement="right" overlay={popover("Published Forms", "Once published, forms can't be edited. You can fill out the form and see the responses in a table format!")}>
                             <AiOutlineQuestionCircle className="ml-2" type="button" size={24}/>
                         </OverlayTrigger>
                     </h1>
@@ -120,7 +120,7 @@ const Dashboard = ({
                 </Row>
                 <Row className="m-4 mt-3 d-flex flex-row w-100">
                     <h1 className="lead font-weight-bold w-100">Your Archived Forms
-                        <OverlayTrigger trigger="click" placement="right" overlay={popover("Published Forms", "Once published, forms can't be edited. You can fill out the form and see the responses in a table format!")}>
+                        <OverlayTrigger trigger="click" placement="right" overlay={popover("Archived Forms", "Once archived, you can't edit or fill out the form. You can still view the form and see the past responses!")}>
                             <AiOutlineQuestionCircle className="ml-2" type="button" size={24}/>
                         </OverlayTrigger>
                     </h1>
