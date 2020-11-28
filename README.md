@@ -2,7 +2,7 @@
 > Project made with MERN Stack (MongoDB, Express JS, React JS, Node JS). 
 
 ## Thought Process
-1. Use an external react component [react-jsonschema-form](https://react-jsonschema-form.readthedocs.io/en/latest/), which allows me to build a HTML form from a json schema. This would make it much easier for me to create dynamic forms, since we could inject json into the schema when the user adds/deletes an input, and with react/redux, we could rerender the form when its been edited. We could then save the json into the database so that we can edit and publish the form at anytime.
+1. Use an external react component [react-jsonschema-form](https://react-jsonschema-form.readthedocs.io/en/latest/), which allows me to build a HTML form from a json schema. This would make it much easier for me to create dynamic forms, since we could inject json into the schema when the user adds/deletes an input, and with react/redux, we could rerender the form when its been edited. We could then save the json into the database so that we can retrieve the form at anytime.
 
 **The problem**: Learning how to use this third party component will take more time than I have.
 
