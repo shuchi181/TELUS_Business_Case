@@ -27,7 +27,6 @@ const PublishedForm = ({
     useEffect(() => {
         if(!form) {
             getForm(match.params.formId);
-            console.log("Get Form Called");
         };
     }, [form, match.params.formId, getForm, loading]);
 

@@ -21,24 +21,7 @@ export default function(state = initialState, action) {
         case GET_FORM:
             return {
                 ...state,
-                form: {
-                    title: payload.title,
-                    description: payload.description,
-                    shortTextTitle: payload.shortTextTitle,
-                    longTextTitle: payload.longTextTitle,
-                    multipleChoice: {
-                        multipleChoiceTitle: payload.multipleChoiceTitle,
-                        multipleChoiceOptions: payload.multipleChoiceOptions
-                    },
-                    checkbox: {
-                        checkboxTitle: payload.checkboxTitle,
-                        checkboxOptions: payload.checkboxOptions
-                    },
-                    dropdown: {
-                        dropdownTitle: payload.dropdownTitle,
-                        dropdownOptions: payload.dropdownOptions
-                    }
-                },
+                form: payload,
                 loading: false
             };
         case UPDATE_FORM:
