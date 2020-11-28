@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
 
-import { getForms, getPublishedForms, publishForm, getNotifications, resetNotifications, archiveForm, getArchivedForms } from '../actions/user';
+import { getForms, getPublishedForms, publishForm, getNotifications, resetNotifications, archiveForm, getArchivedForms, clearUser } from '../actions/user';
 import { clearForm } from '../actions/form';
 // Bootstrap Components
 import { Container, Row, Card, Button, Popover, OverlayTrigger } from 'react-bootstrap';
@@ -20,7 +20,8 @@ const Dashboard = ({
     archiveForm,
     getNotifications,
     resetNotifications,
-    clearForm
+    clearForm,
+    clearUser
 }) => {
 
     const [showNotification, setShowNotification] = useState(false);
@@ -42,6 +43,11 @@ const Dashboard = ({
 
     const onClickPublish = (id) => {
         publishForm(id);
+    }
+
+    const onClickArchive = (id) => {
+        archiveForm(id);
+        clearUser();
     }
 
     const removeNotification = () => {
@@ -109,7 +115,7 @@ const Dashboard = ({
                                     <Button type="button" size="sm" className="m-1"><Link className="text-white" to={`/published-form/${form._id}`}>Fill Out Form</Link></Button>
                                     <Button type="button" size="sm" className="m-1"><Link className="text-white" to={`/view-responses/${form._id}`}>View Responses</Link></Button>
                                     <Row>
-                                        <Button type="button" variant="success" size="sm" className="ml-3" onClick={() => archiveForm(form._id)}>Archive Form</Button>
+                                        <Button type="button" variant="success" size="sm" className="ml-3" onClick={() => onClickArchive(form._id)}>Archive Form</Button>
                                     </Row>
                                 </Card.Body>
                             </Card>
@@ -156,6 +162,7 @@ Dashboard.propTypes = {
     archiveForm: PropTypes.func.isRequired,
     getArchivedForms: PropTypes.func.isRequired,
     clearForm: PropTypes.func.isRequired,
+    clearUser: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
@@ -165,5 +172,5 @@ const mapStateToProps = state => ({
 
 export default connect(
     mapStateToProps,
-    { getForms, getPublishedForms, publishForm, getNotifications, resetNotifications, archiveForm, getArchivedForms, clearForm }
+    { getForms, getPublishedForms, publishForm, getNotifications, resetNotifications, archiveForm, getArchivedForms, clearForm, clearUser }
 )(Dashboard);
