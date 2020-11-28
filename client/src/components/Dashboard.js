@@ -8,7 +8,7 @@ import { AiOutlineQuestionCircle } from 'react-icons/ai';
 import { getForms, getPublishedForms, publishForm, getNotifications, resetNotifications, archiveForm, getArchivedForms } from '../actions/user';
 import { clearForm } from '../actions/form';
 // Bootstrap Components
-import { Container, Row, Card, Button, Popover, OverlayTrigger, Alert } from 'react-bootstrap';
+import { Container, Row, Card, Button, Popover, OverlayTrigger } from 'react-bootstrap';
 
 const Dashboard = ({
     user: { forms, publishedForms, notifications, loading, archivedForms },
@@ -20,23 +20,25 @@ const Dashboard = ({
     archiveForm,
     getNotifications,
     resetNotifications,
+    clearForm
 }) => {
 
     const [showNotification, setShowNotification] = useState(false);
 
     useEffect(() => {
-        if(form) clearForm();
         if(!forms) {
             getForms();
             getPublishedForms();
             getArchivedForms();
             getNotifications();
-            clearForm();
         }
+        if(!loading && form.form) {
+            clearForm();
+        };
         if(notifications && !notifications.hasChecked && notifications.newNotification > 0) {
             setShowNotification(true);
         }
-    }, [forms, form, publishedForms, archivedForms, getForms, getPublishedForms, loading, notifications, getNotifications, getArchivedForms]);
+    }, [forms, form, publishedForms, archivedForms, getForms, getPublishedForms, loading, notifications, getNotifications, getArchivedForms, clearForm]);
 
     const onClickPublish = (id) => {
         publishForm(id);
@@ -59,17 +61,12 @@ const Dashboard = ({
     return (
         <Container fluid className="w-100 mx-auto p-4">
             <Row>
-                <Alert variant="warning">
-                    BUG: Need to refresh when visiting / editing a form to get the right data. 
-                </Alert>
-            </Row>
-            <Row>
                 {showNotification &&
                     <Row className="ml-4 mb-4 d-flex flex-row">
-                        <Button variant="primary" onClick={() => removeNotification()}>You have {notifications.newNotification} new Notifications!</Button>
+                        <Button variant="primary" onClick={() => removeNotification()}>You have {notifications.newNotification} new response{notifications.newNotification > 1 ? 's' : ''}!</Button>
                     </Row>
                 }
-                <Row className="m-4 d-flex flex-row w-100">
+                <Row className="ml-4 mb-4 d-flex flex-row w-100">
                     <h1 className="lead font-weight-bold w-100">Your Forms
                         <OverlayTrigger trigger="click" placement="right" overlay={popover("Your Forms", "This is where you can add a new form or edit an existing one. Once a form has been finalized, click the publish button to be able to fill out a response!")}>
                             <AiOutlineQuestionCircle className="ml-2" type="button" size={24}/>

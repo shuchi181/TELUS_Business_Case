@@ -25,6 +25,11 @@ export default function(state = initialState, action) {
                 loading: false
             };
         case UPDATE_FORM:
+            return {
+                ...state,
+                form: null,
+                loading: false
+            }
         case CREATE_FORM:
             return {
                 ...state,

@@ -40,12 +40,9 @@ export const createForm = (formData) => async dispatch => {
 /* UPDATE FORM */
 export const updateForm = (formId, formData) => async dispatch => {
     try {
-        const res = await api.post(`/form/update-form/${formId}`, formData);
+        await api.post(`/form/update-form/${formId}`, formData);
 
-        dispatch({
-            type: UPDATE_FORM,
-            payload: res.data
-        });
+        dispatch({ type: UPDATE_FORM });
     } catch (err) {
         console.error(err);
     }

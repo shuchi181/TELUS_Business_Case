@@ -133,7 +133,6 @@ const EditForm = ({
     /* On Back Click */
     const onBackClick = () => {
         clearUser();
-        clearForm();
         history.goBack();
     }
 
