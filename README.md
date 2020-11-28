@@ -11,7 +11,9 @@
 ## Bugs to fix and Improvements to be made
 **Bugs:**
 1. Components not rerendering after redux state is changed.
-2. Published Forms fail to load due to the bug above.
+2. Previously visited form data is showing up in the current form.
+
+When user views a form and then a different form, the data from the previous form is populated in the current form. Which is definitely not good. I believe the reason why this is happening is due to the fact that redux does a shallow comparison between the previous state and the new state, to see if component should rerender or not. So It sees the form data as unchanged and therefore does not rerender the component which means the new form data is not populated until browser is manually refreshed.
 
 **Improvements:**
 1. Add authentication so dashboard is not public.
