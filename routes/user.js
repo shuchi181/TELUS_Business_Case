@@ -127,4 +127,53 @@ router.post('/reset-notifications', async (req, res) => {
     }
 });
 
+/**
+ * @route   POST user/archive-form/:formId
+ * @desc    Archive a form
+ * @access  PUBLIC
+ */
+router.post('/archive-form/:formId', async (req, res) => {
+    try {
+        // Push formId to archivedForms and remove the formId from publishedForms
+        await User.updateOne(
+            {},
+            {
+                $addToSet: { archivedForms: { formId: req.params.formId } },
+                $pull: { publishedForms: { formId: req.params.formId } } 
+            }
+        );
+
+        res.json({ msg: "Succesfully moved form to Archives" });
+    } catch (err) {
+        console.error(err);
+    }
+});
+
+/**
+ * @route   GET user/archived-forms
+ * @desc    GET archivedForms
+ * @access  PUBLIC
+ */
+router.get('/archived-forms', async (req, res) => {
+    try {
+        const user = await User.find({ });
+        if(!user[0]) return res.json([]);
+
+        // Put archived forms' id into a new array
+        let formIds = new Array();
+        user[0].archivedForms.map(form => {
+            formIds.push(form.formId);
+        });
+
+        // Get all forms that matches the values in the array
+        const forms = await Form.find(
+            {_id: { $in: formIds } }
+        );
+        
+        res.json(forms);
+    } catch (err) {
+        console.error(err);
+    }
+});
+
 module.exports = router;

@@ -17,6 +17,14 @@ const UserSchema = new mongoose.Schema({
             }
         }
     ],
+    archivedForms: [
+        {
+            formId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'form'
+            }
+        }
+    ],
     notifications: {
         newNotification: {
             type: Number,

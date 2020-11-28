@@ -6,7 +6,8 @@ import {
     PUBLISH_FORM,
     GET_NOTIFICATIONS,
     RESET_NOTIFICATIONS,
-    CLEAR_USER
+    CLEAR_USER,
+    GET_ARCHIVED_FORMS
 } from './types';
 
 /* GET FORMS */
@@ -78,7 +79,28 @@ export const resetNotifications = () => async dispatch => {
     } catch (err) {
         console.error(err);
     }
-}
+};
+
+export const archiveForm = (formId) => async dispatch => {
+    try {
+        await api.post(`/user/archive-form/${formId}`);
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+export const getArchivedForms = () => async dispatch => {
+    try {
+        const res = await api.get('/user/archived-forms');
+
+        dispatch({
+            type: GET_ARCHIVED_FORMS,
+            payload: res.data
+        });
+    } catch (err) {
+        console.error(err);
+    }
+};
 
 /* Clear user */
 export const clearUser = () => dispatch => dispatch({ type: CLEAR_USER });

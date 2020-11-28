@@ -10,7 +10,6 @@ import {
 
 /* GET FORM */
 export const getForm = (formId) => async dispatch => {
-    dispatch({ type: CLEAR_FORM });
     try {
         const res = await api.get(`/form/${formId}`);
 

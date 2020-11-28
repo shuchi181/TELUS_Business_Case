@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { createForm } from '../../actions/form';
+import { createForm, clearForm } from '../../actions/form';
 import { clearUser } from '../../actions/user';
 
 import { Container, Col, Row, Form, Button, Popover, OverlayTrigger } from 'react-bootstrap';
@@ -13,6 +13,7 @@ import { AiOutlineQuestionCircle } from 'react-icons/ai';
 const NewForm = ({
     createForm,
     clearUser,
+    clearForm,
     history
 }) => {
     // Preview
@@ -97,12 +98,19 @@ const NewForm = ({
         setFormData({ ...formData, dropdownOptions: temp });
     }
 
+    const onBackClick = () => {
+        clearUser();
+        clearForm();
+        history.goBack();
+    }
+
     /* On Submit */
     const onSubmit = (e) => {
         e.preventDefault();
 
         createForm(formData);
         clearUser();
+        clearForm();
         history.goBack();
     }
     return formData && !showPreview ? (
@@ -120,7 +128,7 @@ const NewForm = ({
                             <Form.Control type="text" value={formData.description || ''} name="description" onChange={(e) => onChange(e)} />
                         </Form.Group>
                         <Form.Group controlId="textForm" className="p-3 rounded bg-white">
-                            <Form.Label>Short Text Fiel
+                            <Form.Label>Short Text Field
                                 <OverlayTrigger trigger="click" placement="right" overlay={popover("Short Text Field", "This input is for short, open ended questions in forms.")}>
                                     <AiOutlineQuestionCircle className="ml-2" type="button" size={24}/>
                                 </OverlayTrigger>
@@ -223,7 +231,7 @@ const NewForm = ({
                             </Form.Row>
                         </Form.Group>
                         <Form.Group className="mt-4">
-                            <Button className="mr-2" variant="secondary" type="button" onClick={() => history.goBack()}>Back</Button>
+                            <Button className="mr-2" variant="secondary" type="button" onClick={() => onBackClick()}>Back</Button>
                             <Button className="mr-2" type="submit">Save Form</Button>
                             <Button type="button" onClick={ () => setShowPreview(true)}>Preview Form</Button>
                             <OverlayTrigger trigger="click" placement="top" overlay={popover("Preview Form", "Check out what the form will look like when published!")}>
@@ -243,10 +251,11 @@ NewForm.propTypes = {
     createForm: PropTypes.func.isRequired,
     form: PropTypes.object.isRequired,
     clearUser: PropTypes.func.isRequired,
+    clearForm: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
     form: state.form
 })
 
-export default connect(mapStateToProps, { createForm, clearUser })(NewForm);
+export default connect(mapStateToProps, { createForm, clearUser, clearForm })(NewForm);

@@ -1,20 +1,23 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { AiOutlineQuestionCircle } from 'react-icons/ai';
 
-import { getForms, getPublishedForms, publishForm, getNotifications, resetNotifications } from '../actions/user';
-
+import { getForms, getPublishedForms, publishForm, getNotifications, resetNotifications, archiveForm, getArchivedForms } from '../actions/user';
+import { clearForm } from '../actions/form';
 // Bootstrap Components
-import { Container, Row, Card, Button, Alert, Popover, OverlayTrigger } from 'react-bootstrap';
+import { Container, Row, Card, Button, Popover, OverlayTrigger, Alert } from 'react-bootstrap';
 
 const Dashboard = ({
-    user: { forms, publishedForms, notifications, loading },
+    user: { forms, publishedForms, notifications, loading, archivedForms },
+    form,
     getForms,
     getPublishedForms,
     publishForm,
+    getArchivedForms,
+    archiveForm,
     getNotifications,
     resetNotifications,
 }) => {
@@ -22,15 +25,18 @@ const Dashboard = ({
     const [showNotification, setShowNotification] = useState(false);
 
     useEffect(() => {
+        if(form) clearForm();
         if(!forms) {
             getForms();
             getPublishedForms();
+            getArchivedForms();
             getNotifications();
+            clearForm();
         }
         if(notifications && !notifications.hasChecked && notifications.newNotification > 0) {
             setShowNotification(true);
         }
-    }, [forms, publishedForms, getForms, getPublishedForms, loading, notifications, getNotifications]);
+    }, [forms, form, publishedForms, archivedForms, getForms, getPublishedForms, loading, notifications, getNotifications, getArchivedForms]);
 
     const onClickPublish = (id) => {
         publishForm(id);
@@ -53,18 +59,16 @@ const Dashboard = ({
     return (
         <Container fluid className="w-100 mx-auto p-4">
             <Row>
-                <Row className="ml-4 mb-4 d-flex flex-row">
-                    {showNotification &&
-                        <Fragment>
-                            <Button variant="primary" onClick={() => removeNotification()}>You have {notifications.newNotification} new Notifications!</Button>
-                        </Fragment>
-                    }
-                </Row>
-                <Row className="mx-4 w-100 d-flex flex-row">
-                    <Alert variant="info">
-                        You may need to refresh the page to see changes such as the new forms and responses. Apologies for the inconvenience!
-                    </Alert>
-                </Row>
+                <Alert variant="warning">
+                    BUG: Need to refresh when visiting / editing a form to get the right data. 
+                </Alert>
+            </Row>
+            <Row>
+                {showNotification &&
+                    <Row className="ml-4 mb-4 d-flex flex-row">
+                        <Button variant="primary" onClick={() => removeNotification()}>You have {notifications.newNotification} new Notifications!</Button>
+                    </Row>
+                }
                 <Row className="m-4 d-flex flex-row w-100">
                     <h1 className="lead font-weight-bold w-100">Your Forms
                         <OverlayTrigger trigger="click" placement="right" overlay={popover("Your Forms", "This is where you can add a new form or edit an existing one. Once a form has been finalized, click the publish button to be able to fill out a response!")}>
@@ -89,12 +93,12 @@ const Dashboard = ({
                             </Card>
                         ))
                     ) : (
-                        <p>No forms to show...</p>
+                        <p>No forms to show.</p>
                     )}
                 </Row>
-                <Row className="m-4 mt-5 d-flex flex-row">
+                <Row className="m-4 mt-3 d-flex flex-row w-100">
                     <h1 className="lead font-weight-bold w-100">Your Published Forms
-                        <OverlayTrigger trigger="click" placement="right" overlay={popover("Published Forms", "Once published, forms can't be edited. You can fill out the form and see the responses in a table format!")}>
+                        <OverlayTrigger trigger="click" placement="right" overlay={popover("Archived Forms", "Once archived, you can't edit or fill out the form. You can still view the form and see the past responses!")}>
                             <AiOutlineQuestionCircle className="ml-2" type="button" size={24}/>
                         </OverlayTrigger>
                     </h1>
@@ -107,11 +111,36 @@ const Dashboard = ({
                                     <Card.Text>Responses: {form.formResponses.length || 0}</Card.Text>
                                     <Button type="button" size="sm" className="m-1"><Link className="text-white" to={`/published-form/${form._id}`}>Fill Out Form</Link></Button>
                                     <Button type="button" size="sm" className="m-1"><Link className="text-white" to={`/view-responses/${form._id}`}>View Responses</Link></Button>
+                                    <Row>
+                                        <Button type="button" variant="success" size="sm" className="ml-3" onClick={() => archiveForm(form._id)}>Archive Form</Button>
+                                    </Row>
                                 </Card.Body>
                             </Card>
                         ))
                     ) : (
-                        <h4 className="lead">You have no published forms...</h4>
+                        <h4 className="lead">You have no published forms.</h4>
+                    )}
+                </Row>
+                <Row className="m-4 mt-3 d-flex flex-row w-100">
+                    <h1 className="lead font-weight-bold w-100">Your Archived Forms
+                        <OverlayTrigger trigger="click" placement="right" overlay={popover("Published Forms", "Once published, forms can't be edited. You can fill out the form and see the responses in a table format!")}>
+                            <AiOutlineQuestionCircle className="ml-2" type="button" size={24}/>
+                        </OverlayTrigger>
+                    </h1>
+                    { archivedForms && archivedForms.length > 0 ? (
+                        archivedForms.map((form, key) => (
+                            <Card key={key} className="h-auto m-2 p-2">
+                                <Card.Body>
+                                    <Card.Title>{form.form.title}</Card.Title>
+                                    <Card.Text>{form.form.description}</Card.Text>
+                                    <Card.Text>Responses: {form.formResponses.length || 0}</Card.Text>
+                                    <Button type="button" variant="secondary" size="sm" className="m-1"><Link className="text-white" to={`/archived-form/${form._id}`}>View Form</Link></Button>
+                                    <Button type="button" variant="secondary" size="sm" className="m-1"><Link className="text-white" to={`/view-responses/${form._id}`}>View Responses</Link></Button>
+                                </Card.Body>
+                            </Card>
+                        ))
+                    ) : (
+                        <h4 className="lead">You have no archived forms.</h4>
                     )}
                 </Row>
             </Row>
@@ -121,15 +150,23 @@ const Dashboard = ({
 
 Dashboard.propTypes = {
     user: PropTypes.object.isRequired,
+    form: PropTypes.object.isRequired,
     getForms: PropTypes.func.isRequired,
     getPublishedForms: PropTypes.func.isRequired,
     publishForm: PropTypes.func.isRequired,
     getNotifications: PropTypes.func.isRequired,
     resetNotifications: PropTypes.func.isRequired,
+    archiveForm: PropTypes.func.isRequired,
+    getArchivedForms: PropTypes.func.isRequired,
+    clearForm: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
     user: state.user,
+    form: state.form
 });
 
-export default connect(mapStateToProps, { getForms, getPublishedForms, publishForm, getNotifications, resetNotifications })(Dashboard);
+export default connect(
+    mapStateToProps,
+    { getForms, getPublishedForms, publishForm, getNotifications, resetNotifications, archiveForm, getArchivedForms, clearForm }
+)(Dashboard);

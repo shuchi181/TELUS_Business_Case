@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { updateForm, getForm } from '../../actions/form';
+import { updateForm, getForm, clearForm } from '../../actions/form';
 import { clearUser } from '../../actions/user';
-import { Container, Col, Row, Form, Button } from 'react-bootstrap';
+import { Container, Col, Row, Form, Button, Alert } from 'react-bootstrap';
 
 import PreviewForm from './PreviewForm';
 
@@ -25,6 +25,7 @@ const EditForm = ({
     updateForm,
     getForm,
     clearUser,
+    clearForm,
     match,
     history
 }) => {
@@ -129,12 +130,20 @@ const EditForm = ({
         setFormData({ ...formData, dropdownOptions: temp });
     }
 
+    /* On Back Click */
+    const onBackClick = () => {
+        clearUser();
+        clearForm();
+        history.goBack();
+    }
+
     /* On Submit */
     const onSubmit = (event) => {
         event.preventDefault();
 
-        updateForm(match.params.formId, formData);
         clearUser();
+        clearForm();
+        updateForm(match.params.formId, formData);
         history.goBack();
     }
 
@@ -244,7 +253,7 @@ const EditForm = ({
                             </Form.Row>
                         </Form.Group>
                         <Form.Group className="mt-4">
-                            <Button className="mr-2" variant="secondary" type="button" onClick={() => history.goBack()}>Back</Button>
+                            <Button className="mr-2" variant="secondary" type="button" onClick={() => onBackClick()}>Back</Button>
                             <Button className="mr-2" type="submit">Save Form</Button>
                             <Button type="button" onClick={() => setShowPreview(true)}>Preview Form</Button>
                         </Form.Group>
@@ -262,10 +271,11 @@ EditForm.propTypes = {
     getForm: PropTypes.func.isRequired,
     form: PropTypes.object.isRequired,
     clearUser: PropTypes.func.isRequired,
+    clearForm: PropTypes.func.isRequired,
 }
 
 const mapStateToProps = state => ({
     form: state.form
 })
 
-export default connect(mapStateToProps, { updateForm, getForm, clearUser })(EditForm);
+export default connect(mapStateToProps, { updateForm, getForm, clearUser, clearForm })(EditForm);

@@ -5,12 +5,14 @@ import {
     GET_PUBLISHED_FORMS,
     GET_NOTIFICATIONS,
     RESET_NOTIFICATIONS,
+    GET_ARCHIVED_FORMS,
     CLEAR_USER
 } from '../actions/types';
 
 const initialState = {
     forms: null,
     publishedForms: null,
+    archivedForms: null,
     notifications: [],
     loading: true,
     error: {}
@@ -39,6 +41,12 @@ export default function(state = initialState, action) {
                 publishedForms: payload,
                 loading: false
             }
+        case GET_ARCHIVED_FORMS:
+            return {
+                ...state,
+                archivedForms: payload,
+                loading: false
+            }
         case GET_NOTIFICATIONS:
             return {
                 ...state,
@@ -62,6 +70,7 @@ export default function(state = initialState, action) {
                 ...state,
                 forms: null,
                 publishedForms: null,
+                archivedForms: null,
                 loading: false
             }
         default: 

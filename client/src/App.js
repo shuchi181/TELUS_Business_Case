@@ -10,6 +10,7 @@ import EditForm from './components/form-components/EditForm';
 import NewForm from './components/form-components/NewForm';
 import PublishedForm from './components/form-components/PublishedForm';
 import ResponseView from './components/form-components/ResponseView';
+import ArchivedForm from './components/form-components/ArchivedForm';
 import TopBar from './components/layouts/TopBar';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -27,6 +28,7 @@ function App() {
             <Route exact path="/edit-form/:formId" component={EditForm} />
             <Route exact path="/published-form/:formId" component={PublishedForm} />
             <Route exact path="/view-responses/:formId" component={ResponseView} />
+            <Route exact path="/archived-form/:formId" component={ArchivedForm} />
           </Switch>
         </Fragment>
       </Router>
