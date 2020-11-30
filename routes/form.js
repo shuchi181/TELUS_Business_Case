@@ -152,7 +152,7 @@ router.get('/get-form-responses/:formId', async (req, res) => {
         const form = await Form.find({_id: req.params.formId});
         if(!form) return res.json([]);
         
-        res.json(form[0].formResponses);
+        res.json(form[0]);
     } catch (err) {
         console.log(err);
     }

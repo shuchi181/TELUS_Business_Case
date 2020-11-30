@@ -84,7 +84,7 @@ const Dashboard = ({
                             <Button type="button" className="mt-3"><Link to="/new-form" className="text-white">New Form</Link></Button>
                         </Card.Body>
                     </Card>
-                    {forms && forms.length > 0 ? (
+                    {forms && forms.length > 0 && (
                         forms.map((form, key) => (
                             <Card key={key} className="h-auto m-2 p-2">
                                 <Card.Body>
@@ -95,8 +95,6 @@ const Dashboard = ({
                                 </Card.Body>
                             </Card>
                         ))
-                    ) : (
-                        <p>No forms to show.</p>
                     )}
                 </Row>
                 <Row className="m-4 mt-3 d-flex flex-row w-100">

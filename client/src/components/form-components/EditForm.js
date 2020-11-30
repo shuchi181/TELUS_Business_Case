@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { updateForm, getForm, clearForm } from '../../actions/form';
 import { clearUser } from '../../actions/user';
-import { Container, Col, Row, Form, Button, Alert } from 'react-bootstrap';
+import { Container, Col, Row, Form, Button } from 'react-bootstrap';
 
 import PreviewForm from './PreviewForm';
 

@@ -78,7 +78,7 @@ const ArchivedForm = ({
                                 <option selected disabled>Select One</option>
                                 {form.dropdown.dropdownOptions && form.dropdown.dropdownOptions.length > 0 && (
                                     form.dropdown.dropdownOptions.map((value, key) => (
-                                        <option>{value}</option>
+                                        <option key={key}>{value}</option>
                                     ))
                                 )}
                             </Form.Control>

@@ -39,7 +39,8 @@ export default function(state = initialState, action) {
         case GET_FORM_RESPONSES:
             return {
                 ...state,
-                responses: payload,
+                form: payload.form,
+                responses: payload.formResponses,
                 loading: false
             }
         case FORM_UPDATE_ERROR:

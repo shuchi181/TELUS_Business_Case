@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -7,7 +7,7 @@ import { Table, Row, Button, Container } from 'react-bootstrap';
 import { getFormResponses, clearForm } from '../../actions/form';
 
 const ResponseView = ({
-    form: { responses },
+    form: { form, responses },
     getFormResponses,
     clearForm,
     match,
@@ -23,22 +23,22 @@ const ResponseView = ({
         history.push("");
     }
 
-    return responses && responses.length > 0 ? (
+    return form && responses && responses.length > 0 ? (
         <Container fluid className="p-4">
             <Table striped bordered>
-                <thead>
+                <thead className="thead-dark text-center">
                     <tr>
-                        <th>Short Text Response</th>
-                        <th>Long Text Response</th>
-                        <th>Multiple Choice Response</th>
-                        <th>Checkbox Response</th>
-                        <th>Dropdown Response</th>
+                        <th>{form.shortTextTitle}</th>
+                        <th>{form.longTextTitle}</th>
+                        <th>{form.multipleChoice.multipleChoiceTitle}</th>
+                        <th>{form.checkbox.checkboxTitle}</th>
+                        <th>{form.dropdown.dropdownTitle}</th>
                     </tr>
                 </thead>
                 <tbody>
                     {responses.length > 0 && (
                         responses.map((response,key) => (
-                            <tr key={key}>
+                            <tr key={key} className="text-center">
                                 <td>{response.shortTextResponse}</td>
                                 <td>{response.longTextResponse}</td>
                                 <td>{response.multipleChoiceResponse}</td>
